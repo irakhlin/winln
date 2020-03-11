@@ -191,7 +191,7 @@ CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPPFLAGS = 
 CYGPATH_W = cygpath -w
-DEFS = -DPACKAGE_NAME=\"winln\" -DPACKAGE_TARNAME=\"winln\" -DPACKAGE_VERSION=\"1.1\" -DPACKAGE_STRING=\"winln\ 1.1\" -DPACKAGE_BUGREPORT=\"i.rakhlin@gmail.com\" -DPACKAGE_URL=\"\" -DPACKAGE=\"winln\" -DVERSION=\"1.1\" -D_GNU_SOURCE=1
+DEFS = -DPACKAGE_NAME=\"winln\" -DPACKAGE_TARNAME=\"winln\" -DPACKAGE_VERSION=\"1.2\" -DPACKAGE_STRING=\"winln\ 1.2\" -DPACKAGE_BUGREPORT=\"i.rakhlin@gmail.com\" -DPACKAGE_URL=\"\" -DPACKAGE=\"winln\" -DVERSION=\"1.2\" -D_GNU_SOURCE=1
 DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
@@ -212,15 +212,15 @@ OBJEXT = o
 PACKAGE = winln
 PACKAGE_BUGREPORT = i.rakhlin@gmail.com
 PACKAGE_NAME = winln
-PACKAGE_STRING = winln 1.1
+PACKAGE_STRING = winln 1.2
 PACKAGE_TARNAME = winln
 PACKAGE_URL = 
-PACKAGE_VERSION = 1.1
+PACKAGE_VERSION = 1.2
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
-VERSION = 1.1
+VERSION = 1.2
 abs_builddir = /c/dev/opensource/winln
 abs_srcdir = /c/dev/opensource/winln
 abs_top_builddir = /c/dev/opensource/winln

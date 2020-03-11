@@ -4,6 +4,12 @@
  *
  * Revision History:
  *
+ * Version 1.2 - 2020-03-11
+ *
+ *  - Check registry for windows 10 developer mode and correctly create
+ *    Symlinks without special permission:
+ *    https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/
+ *
  * Version 1.1 - 2001-12-04
  *
  *  - Use Cygwin functions to convert between character encodings,
@@ -42,7 +48,7 @@
 #include <libgen.h>
 
 #define PRGNAME "winln"
-#define PRGVER "1.1"
+#define PRGVER "1.2"
 #define PRGAUTHOR "Daniel Colascione <dan.colascione@gmail.com>"
 #define PRGCOPY "Copyright (C) 2011 " PRGAUTHOR
 #define PRGLICENSE "GPLv2 or later <http://www.gnu.org/licenses/gpl-2.0.html>"

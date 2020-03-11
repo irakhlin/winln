@@ -59,6 +59,37 @@ to_mbs(const wchar_t* wc);
 static wchar_t*
 to_wcs(const char* mbs);
 
+static int getRegValue() {
+    HKEY hKey = HKEY_LOCAL_MACHINE;
+    LPCWSTR subKey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppModelUnlock";
+    DWORD options = 0;
+    REGSAM samDesired = KEY_READ;
+    
+    HKEY OpenResult;
+    
+    LPCWSTR pValue = L"AllowDevelopmentWithoutDevLicense";
+    DWORD flags = RRF_RT_ANY;
+    
+    DWORD dataType;
+    
+    WCHAR value[255];
+    PVOID pvData = value;
+    
+    DWORD size = sizeof(value);
+    
+    LONG err = RegOpenKeyEx(hKey, subKey, options, samDesired, &OpenResult);
+
+    if (err != ERROR_SUCCESS)
+    {
+        printf("The %s subkey could not be opened. Error code: %x\n", subKey, err);
+    }
+    else
+    {
+        RegGetValue(OpenResult, NULL, pValue, flags, &dataType, pvData, &size);
+    }
+    return *(DWORD*)pvData;
+}
+
 static void
 usage()
 {
@@ -155,6 +186,10 @@ static int symbolic   = 0;
 
 /* Never treat last argument as a directory */
 static int no_tgt_dir = 0;
+
+/* Developer mode registry key for windows 10 
+https://blogs.windows.com/windowsdeveloper/2016/12/02/symlinks-windows-10/ */
+static int devRegValue = 0;
 
 enum type_mode {
     MODE_FORCE_FILE,
@@ -288,6 +323,7 @@ do_link(const char* target, const char* link)
     DWORD flags;
 
     int ret = 0;
+    int devRegValue = getRegValue();
 
     if(lstat(link, &lstatbuf) == 0) {
         lstat_success = 1;
@@ -349,7 +385,10 @@ do_link(const char* target, const char* link)
             }
             break;
     }
-
+    /*Allow creating symlink without privileges in windows 10 developer mode */
+    if(devRegValue == 1) {
+        flags |= SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE;
+    }
     /* Don't call link(2), even for hard links: we want to maintain
      * absolute parity between the hard and symbolic links made using
      * this tool.  We don't want link targets to change just because
@@ -473,6 +512,8 @@ main(int argc, char* argv[])
     to_mbs(L"");
     to_wcs("");
 
+    devRegValue = getRegValue();
+    
     while ((c = getopt_long(argc, argv, "VvdfFsATt:", longopts, 0)) != -1) {
         switch(c) {
             case 'v':
@@ -531,8 +572,8 @@ main(int argc, char* argv[])
             ret = 2;
             goto out;
         }
-
-        if(!set_privilege_status(L"SeCreateSymbolicLinkPrivilege", TRUE)) {
+        printf("value is: %d", devRegValue);
+        if(!set_privilege_status(L"SeCreateSymbolicLinkPrivilege", TRUE) && devRegValue != 1) {
             fprintf(stderr,
                     PRGNAME ": you don't permission to create symbolic links. Run,"
                     " as administrator,\n"
